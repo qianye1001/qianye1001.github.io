@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Posts on 一千零一夜</title>
-        <link>https://wuyoudexiao.github.io/post/</link>
-        <description>Recent content in Posts on 一千零一夜</description>
+        <title>杂谈 on 一千零一夜</title>
+        <link>https://wuyoudexiao.github.io/categories/%E6%9D%82%E8%B0%88/</link>
+        <description>Recent content in 杂谈 on 一千零一夜</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Sun, 06 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://wuyoudexiao.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 06 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://wuyoudexiao.github.io/categories/%E6%9D%82%E8%B0%88/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Hello World</title>
         <link>https://wuyoudexiao.github.io/p/hello-world/</link>
         <pubDate>Sun, 06 Mar 2022 00:00:00 +0000</pubDate>
