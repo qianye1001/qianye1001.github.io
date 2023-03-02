@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='To use this feature, add links section to frontmatter.
-This page&amp;rsquo;s frontmatter:
-1 2 3 4 5 6 7 8 9  links:- title:GitHubdescription:GitHub is the world&amp;#39;s largest software development platform.website:https://github.comimage:https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png- title:TypeScriptdescription:TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.website:https://www.typescriptlang.orgimage:ts-logo-128.jpg  image field accepts both local and external images.'>
-<title>Links</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='一次随意改动生产环境造成的事故'>
+<title>ES集群的崩溃</title>
 
-<link rel='canonical' href='https://wuyoudexiao.github.io/links/'>
+<link rel='canonical' href='https://wuyoudexiao.github.io/p/issue-es/'>
 
-<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='Links'>
-<meta property='og:description' content='To use this feature, add links section to frontmatter.
-This page&amp;rsquo;s frontmatter:
-1 2 3 4 5 6 7 8 9  links:- title:GitHubdescription:GitHub is the world&amp;#39;s largest software development platform.website:https://github.comimage:https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png- title:TypeScriptdescription:TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.website:https://www.typescriptlang.orgimage:ts-logo-128.jpg  image field accepts both local and external images.'>
-<meta property='og:url' content='https://wuyoudexiao.github.io/links/'>
+<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='ES集群的崩溃'>
+<meta property='og:description' content='一次随意改动生产环境造成的事故'>
+<meta property='og:url' content='https://wuyoudexiao.github.io/p/issue-es/'>
 <meta property='og:site_name' content='一千零一夜'>
-<meta property='og:type' content='article'><meta property='article:section' content='Page' />
-<meta name="twitter:title" content="Links">
-<meta name="twitter:description" content="To use this feature, add links section to frontmatter.
-This page&amp;rsquo;s frontmatter:
-1 2 3 4 5 6 7 8 9  links:- title:GitHubdescription:GitHub is the world&amp;#39;s largest software development platform.website:https://github.comimage:https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png- title:TypeScriptdescription:TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.website:https://www.typescriptlang.orgimage:ts-logo-128.jpg  image field accepts both local and external images.">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Elastic' /><meta property='article:tag' content='Linux' /><meta property='article:tag' content='Deploy' /><meta property='article:published_time' content='2023-03-01T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-03-01T12:00:00&#43;00:00'/><meta property='og:image' content='https://wuyoudexiao.github.io/p/issue-es/cover.png' />
+<meta name="twitter:title" content="ES集群的崩溃">
+<meta name="twitter:description" content="一次随意改动生产环境造成的事故"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://wuyoudexiao.github.io/p/issue-es/cover.png' />
     <link rel="shortcut icon" href="favicon/favicon.ico" />
 
     </head>
@@ -169,7 +164,7 @@ This page&amp;rsquo;s frontmatter:
         
         
 
-        <li  class='current' >
+        <li >
             <a href='/links/' >
                 
                 
@@ -215,20 +210,83 @@ This page&amp;rsquo;s frontmatter:
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#责任人">责任人</a></li>
+    <li><a href="#问题表现和原因">问题表现和原因</a></li>
+    <li><a href="#各时间节点操作和恢复步骤及线上问题表现">各时间节点（操作和恢复步骤及线上问题表现）</a></li>
+    <li><a href="#后续避免措施">后续避免措施</a>
+      <ol>
+        <li><a href="#es配置注意事项">ES配置注意事项：</a></li>
+      </ol>
+    </li>
+    <li><a href="#流程事项">流程事项：</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
-    <article class="main-article">
+    <article class="has-image main-article">
     <header class="article-header">
+        <div class="article-image">
+            <a href="/p/issue-es/">
+                <img src="/p/issue-es/cover_hu18cfcb466ca25429b480c33e8d5461b4_490997_800x0_resize_box_3.png"
+                        srcset="/p/issue-es/cover_hu18cfcb466ca25429b480c33e8d5461b4_490997_800x0_resize_box_3.png 800w, /p/issue-es/cover_hu18cfcb466ca25429b480c33e8d5461b4_490997_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="251" 
+                        loading="lazy"
+                        alt="Featured image of post ES集群的崩溃" />
+                
+            </a>
+        </div>
+    
 
     <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98/" >
+                问题复盘
+            </a>
+        
+    </header>
     
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/links/">Links</a>
+            <a href="/p/issue-es/">ES集群的崩溃</a>
         </h2>
     
+        
+        <h3 class="article-subtitle">
+            一次随意改动生产环境造成的事故
+        </h3>
         
     </div>
 
@@ -237,6 +295,19 @@ This page&amp;rsquo;s frontmatter:
     
     
     <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 01, 2023</time>
+            </div>
         
 
         
@@ -250,7 +321,7 @@ This page&amp;rsquo;s frontmatter:
 
 
                 <time class="article-time--reading">
-                    阅读时长: 1 分钟
+                    阅读时长: 2 分钟
                 </time>
             </div>
         
@@ -265,39 +336,52 @@ This page&amp;rsquo;s frontmatter:
     <section class="article-content">
     
     
-    <p>To use this feature, add <code>links</code> section to frontmatter.</p>
-<p>This page&rsquo;s frontmatter:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">links</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">GitHub</span><span class="w">
-</span><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">GitHub is the world&#39;s largest software development platform.</span><span class="w">
-</span><span class="w">    </span><span class="nt">website</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com</span><span class="w">
-</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png</span><span class="w">
-</span><span class="w">  </span>- <span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">TypeScript</span><span class="w">
-</span><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.</span><span class="w">
-</span><span class="w">    </span><span class="nt">website</span><span class="p">:</span><span class="w"> </span><span class="l">https://www.typescriptlang.org</span><span class="w">
-</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ts-logo-128.jpg</span><span class="w">
-</span></code></pre></td></tr></table>
-</div>
-</div><p><code>image</code> field accepts both local and external images.</p>
+    <h1 id="问题复盘">问题复盘</h1>
+<h2 id="责任人">责任人</h2>
+<p>不是我搞炸的，只是负责善后</p>
+<h2 id="问题表现和原因">问题表现和原因</h2>
+<p><strong>问题表现</strong>：Elasticsearch集群全部掉线，科研大数据赋能平台搜索功能不可用，Kibana页面打不开。</p>
+<p><strong>原因</strong>：原153机器中的Elasticsearch部署方式为压缩包安装，存在机器重启后服务掉线隐患，因此需要重新部署为自启动服务。重新安装后，153机器中的新节点无法接入83机器中的集群，尝试重启83中的主节点后出现ES集群全部不可用的情况，尝试回退机器系统后153机器的原服务不能自动恢复，导致83机器中的集群无法正常工作。</p>
+<p><strong>报错的解决</strong>：ES需要超过半数的集群启动才能启动，否则无法选举出主节点，配置中的init master在已经运行后再启动的集群上不生效。所以减少节点数量最好是逐渐减少。</p>
+<h2 id="各时间节点操作和恢复步骤及线上问题表现">各时间节点（操作和恢复步骤及线上问题表现）</h2>
+<ul>
+<li><strong>2月27号</strong>
+尝试在153机器中部署新节点。</li>
+<li><strong>2月28号</strong>
+153机器中的节点无法加入集群
+16点尝试重启83机器中的ES服务，Elasticsearch服务掉线，科研大数据赋能平台搜索功能不可用。
+17点开始回退机器系统。</li>
+<li><strong>3月1号</strong>
+9点重启153机器中的旧服务。
+10点30在153机器中部署新的自启动服务，并成功接入集群，科研大数据赋能平台搜索功能恢复正常。</li>
+</ul>
+<h2 id="后续避免措施">后续避免措施</h2>
+<h3 id="es配置注意事项">ES配置注意事项：</h3>
+<ol>
+<li>新建节点服务安装完不要启动！不要启动！启动会产生新的cluster uuid，与已有集群不一致，导致无法加入集群。如不慎启动，关闭服务后，删除node文件夹</li>
+<li>新节点加入集群只需配置新节点的配置文件即可，证书密钥复制即可，重点配置elasticsearch.yml文件。</li>
+</ol>
+<h2 id="流程事项">流程事项：</h2>
+<ol>
+<li>在不确定是否会对主服务产生影响的情况禁止操作。禁止重启83机器中的服务。</li>
+<li>提前规划好操作方案，并整理成技术文档交由主管老师审核，审核通过后执行。</li>
+</ol>
 
 </section>
 
 
     <footer class="article-footer">
     
+    <section class="article-tags">
+        
+            <a href="/tags/elastic/">Elastic</a>
+        
+            <a href="/tags/linux/">Linux</a>
+        
+            <a href="/tags/deploy/">Deploy</a>
+        
+    </section>
+
 
     
     <section class="article-copyright">
@@ -318,33 +402,54 @@ This page&amp;rsquo;s frontmatter:
 </article>
 
     
-        <div class="article-list--compact links">
-    
-        <article>
-            <a href="https://github.com" target="_blank" rel="noopener">
-                <div class="article-details">
-                    <h2 class="article-title">GitHub</h2>
-                    <footer class="article-time">
-                        
-                            GitHub is the world&#39;s largest software development platform.
-                        
-                    </footer>
-                </div>
-        
-                
-                    <div class="article-image">
-                        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" loading="lazy">
-                    </div>
-                
-            </a>
-        </article>
-    
-</div>
-    
 
     
 
      
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
     
 
     <footer class="site-footer">

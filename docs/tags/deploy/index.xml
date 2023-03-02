@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Posts on 一千零一夜</title>
-        <link>https://wuyoudexiao.github.io/post/</link>
-        <description>Recent content in Posts on 一千零一夜</description>
+        <title>Deploy on 一千零一夜</title>
+        <link>https://wuyoudexiao.github.io/tags/deploy/</link>
+        <description>Recent content in Deploy on 一千零一夜</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Wed, 01 Mar 2023 12:00:00 +0000</lastBuildDate><atom:link href="https://wuyoudexiao.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 01 Mar 2023 12:00:00 +0000</lastBuildDate><atom:link href="https://wuyoudexiao.github.io/tags/deploy/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>ES集群的崩溃</title>
         <link>https://wuyoudexiao.github.io/p/issue-es/</link>
         <pubDate>Wed, 01 Mar 2023 12:00:00 +0000</pubDate>
@@ -42,18 +42,6 @@
 &lt;li&gt;在不确定是否会对主服务产生影响的情况禁止操作。禁止重启83机器中的服务。&lt;/li&gt;
 &lt;li&gt;提前规划好操作方案，并整理成技术文档交由主管老师审核，审核通过后执行。&lt;/li&gt;
 &lt;/ol&gt;
-</description>
-        </item>
-        <item>
-        <title>Hello World</title>
-        <link>https://wuyoudexiao.github.io/p/hello-world/</link>
-        <pubDate>Sun, 06 Mar 2022 00:00:00 +0000</pubDate>
-        
-        <guid>https://wuyoudexiao.github.io/p/hello-world/</guid>
-        <description>&lt;img src="https://wuyoudexiao.github.io/p/hello-world/cover.jpg" alt="Featured image of post Hello World" /&gt;&lt;h1 id=&#34;起点&#34;&gt;起点&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Look to those who walked before to lead those who walk after&lt;/p&gt;
-&lt;/blockquote&gt;
 </description>
         </item>
         
