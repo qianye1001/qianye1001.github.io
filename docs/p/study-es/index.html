@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='学会如何简单搜索，对基础类型有概念'>
+<title>ElasticSearch学习记录</title>
+
+<link rel='canonical' href='https://wuyoudexiao.github.io/p/study-es/'>
+
+<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='ElasticSearch学习记录'>
+<meta property='og:description' content='学会如何简单搜索，对基础类型有概念'>
+<meta property='og:url' content='https://wuyoudexiao.github.io/p/study-es/'>
+<meta property='og:site_name' content='一千零一夜'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Elastic' /><meta property='article:published_time' content='2021-06-02T14:28:00&#43;00:00'/><meta property='article:modified_time' content='2021-06-02T14:28:00&#43;00:00'/><meta property='og:image' content='https://wuyoudexiao.github.io/p/study-es/es-%E8%A1%B0%E5%87%8F%E5%87%BD%E6%95%B0.jpg' />
+<meta name="twitter:title" content="ElasticSearch学习记录">
+<meta name="twitter:description" content="学会如何简单搜索，对基础类型有概念"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://wuyoudexiao.github.io/p/study-es/es-%E8%A1%B0%E5%87%8F%E5%87%BD%E6%95%B0.jpg' />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/kabe_hudeba7777b7f920e6c8ab6e620880b187_36898_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">✨</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">一千零一夜</a></h1>
+            <h2 class="site-description">Look to those who walked before to lead those who walk after.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/wuyoudexiao'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#数据类型">数据类型</a>
+      <ol>
+        <li><a href="#基础类型">基础类型</a>
+          <ol>
+            <li><a href="#字符串">字符串</a></li>
+            <li><a href="#日期">日期</a></li>
+            <li><a href="#整数">整数</a></li>
+          </ol>
+        </li>
+        <li><a href="#高级类型">高级类型</a>
+          <ol>
+            <li><a href="#数组">数组</a></li>
+            <li><a href="#对象">对象</a></li>
+            <li><a href="#嵌套">嵌套</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#ik分词-与-pinyin分词">Ik分词 与 pinyin分词</a></li>
+    <li><a href="#算法bm25优化">算法（BM25）优化</a></li>
+    <li><a href="#query-dsl">Query DSL</a>
+      <ol>
+        <li><a href="#1-采用multi_match匹配">1. 采用multi_match匹配</a></li>
+        <li><a href="#2-采用bool查询">2. 采用bool查询</a></li>
+        <li><a href="#3-采用match_phrase提高权重">3. 采用match_phrase提高权重</a></li>
+        <li><a href="#4-采用boost调整查询语句的权重">4. 采用boost调整查询语句的权重</a></li>
+        <li><a href="#5采用function_score增加评分因素">5.采用function_score增加评分因素</a>
+          <ol>
+            <li><a href="#filed_value_factor">filed_value_factor</a></li>
+            <li><a href="#decay-function">decay function</a></li>
+          </ol>
+        </li>
+        <li><a href="#6采用script_sort进行排序">6.采用script_sort进行排序</a>
+          <ol>
+            <li><a href="#基于脚本的排序">基于脚本的排序</a></li>
+            <li><a href="#如何使用脚本">如何使用脚本</a></li>
+            <li><a href="#人员搜索排序脚本">人员搜索排序脚本</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/study-es/">
+                <img src="/p/study-es/es-%E8%A1%B0%E5%87%8F%E5%87%BD%E6%95%B0_hu1c76feb9b2706ad14d03897c9357b434_29245_800x0_resize_q75_box.jpg"
+                        srcset="/p/study-es/es-%E8%A1%B0%E5%87%8F%E5%87%BD%E6%95%B0_hu1c76feb9b2706ad14d03897c9357b434_29245_800x0_resize_q75_box.jpg 800w, /p/study-es/es-%E8%A1%B0%E5%87%8F%E5%87%BD%E6%95%B0_hu1c76feb9b2706ad14d03897c9357b434_29245_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post ElasticSearch学习记录" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" >
+                学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/study-es/">ElasticSearch学习记录</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            学会如何简单搜索，对基础类型有概念
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jun 02, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 7 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="elasticsearch学习记录">ElasticSearch学习记录</h1>
+<h2 id="数据类型">数据类型</h2>
+<h3 id="基础类型">基础类型</h3>
+<h4 id="字符串">字符串</h4>
+<ul>
+<li><del>String</del> : 高版本的ES已经停用</li>
+<li>text : 当一个字段是要被全文搜索的使用text类型。设置text类型以后，字段内容会被分析，在生成倒排索引，字符串会被分析器分成一个一个词项。<strong>text类型的字段不用于排序，很少用于聚合。</strong></li>
+<li>keyword : 适用于索引结构化的字段。如果字段需要进行过滤、排序、聚合需要采用keyword字段。<strong>keyword类型的字段只能通过精确值搜索到。</strong></li>
+</ul>
+<h4 id="日期">日期</h4>
+<p>date类型，<strong>需要注意</strong>：</p>
+<ol>
+<li>Elasticsearch采用UTC时区，与北京时间相差8小时，同步时需要注明时区。</li>
+<li>默认格式是 strict_date_optional_time||epoch_millis 只接受年月日必须是4位、2位、2位表示，不足两位用0补齐的字符串日期或者long型数字的毫秒时间戳。</li>
+<li>可以指定format使得取时间时是按照固定格式。</li>
+</ol>
+<h4 id="整数">整数</h4>
+<p><strong>在满足需求的情况下，尽可能选择范围小的数据类型。</strong></p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th style="text-align:center">取值范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>byte</td>
+<td style="text-align:center">-128~127</td>
+</tr>
+<tr>
+<td>short</td>
+<td style="text-align:center">-32768~32767</td>
+</tr>
+<tr>
+<td>integer</td>
+<td style="text-align:center">-231~231-1</td>
+</tr>
+<tr>
+<td>long</td>
+<td style="text-align:center">-263~263-1</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="高级类型">高级类型</h3>
+<h4 id="数组">数组</h4>
+<p>可以支持字符数组，整数数组，对象数组。<strong>不支持元素为多个数据类型！</strong></p>
+<h4 id="对象">对象</h4>
+<p>JSON对象，包含嵌套的对象。</p>
+<h4 id="嵌套">嵌套</h4>
+<p>Nested类型允许独立的索引每一个对象，对性能的影响较大。</p>
+<h2 id="ik分词-与-pinyin分词">Ik分词 与 pinyin分词</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 导入字典</li>
+<li><input disabled="" type="checkbox"> 导入研究人员名称</li>
+<li><input disabled="" type="checkbox"> 导入停用词</li>
+<li><input disabled="" type="checkbox"> 自动化更新字典</li>
+</ul>
+<h2 id="算法bm25优化">算法（BM25）优化</h2>
+<p>用$D$代指计算文档，$Q$指的是用户输入的搜索关键词，将$Q$分词后得到若干词$q_i$，计算得到的分数为$score(D,Q)$如下。
+$$
+score(D,Q) = \sum_{i=1}^n IDF(q_i) \cdot \frac{f(q_i,D)\cdot(k_1+1)}{f(q_i,D)+k_1 \cdot (1-b+b\cdot \frac{\left\vert D\right\vert}{avgdl})}
+$$</p>
+<p>在公式中有两个常数参数$b$和$k_1$。其中参数$b$的作用是调整文档长度对相关性影响的大小。$b$越大，文档长度的对相关性得分的影响越大，反之越小。参数$k_1$的作用是调节$q_i$增加时，得分增加的幅度。经过实践验证，通常的系统中选择$b = 0.75,k=2$可以获得较好的效果。</p>
+<h2 id="query-dsl">Query DSL</h2>
+<h3 id="1-采用multi_match匹配">1. 采用multi_match匹配</h3>
+<p>最简单的匹配方式，获得的结果难以满足要求。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="nt">&#34;query&#34;</span><span class="p">:{</span>
+        <span class="nt">&#34;multi_match&#34;</span><span class="p">:{</span>
+            <span class="nt">&#34;query&#34;</span><span class="p">:</span> <span class="s2">&#34;search_text&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;fields&#34;</span><span class="p">:[</span>
+                <span class="s2">&#34;f1&#34;</span><span class="p">,</span><span class="s2">&#34;f2&#34;</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-采用bool查询">2. 采用bool查询</h3>
+<p>添加筛选的查询方式。提供must，should，must_not，filter四种方式组合。</p>
+<ul>
+<li>must必须满足，非直接过滤，参与评分。</li>
+<li>should在有must的情况下无需满足，无must的情况下必须满足至少一个。默认参与评分，可以选择最少满足个数与是否参与评分。</li>
+<li>must_not与filter为过滤器，不参与评分。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="nt">&#34;query&#34;</span><span class="p">:{</span>
+        <span class="nt">&#34;bool&#34;</span><span class="p">:{</span>
+            <span class="nt">&#34;should&#34;</span><span class="p">:[</span>
+                <span class="p">{</span><span class="nt">&#34;match&#34;</span><span class="p">:{</span><span class="nt">&#34;f1&#34;</span><span class="p">:</span><span class="s2">&#34;search_text&#34;</span><span class="p">}},</span>
+                <span class="p">{</span><span class="nt">&#34;match&#34;</span><span class="p">:{</span><span class="nt">&#34;f2&#34;</span><span class="p">:</span><span class="s2">&#34;search_text&#34;</span><span class="p">}}</span>
+            <span class="p">],</span>
+            <span class="nt">&#34;filter&#34;</span><span class="p">:[</span>
+                <span class="p">{</span><span class="nt">&#34;range&#34;</span><span class="p">:{</span><span class="nt">&#34;date&#34;</span><span class="p">:{</span><span class="nt">&#34;gte&#34;</span><span class="p">:</span><span class="s2">&#34;2010-01-01&#34;</span><span class="p">}}},</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-采用match_phrase提高权重">3. 采用match_phrase提高权重</h3>
+<p>解决搜索经常出现<strong>搜索结果和搜索关键词不是连续匹配的</strong>这个问题。match_phrase 要求必须命中所有分词，并且返回的文档命中的词也要按照查询短语的顺序，<strong>词的间距可以使用 slop 设置</strong>。同时使用 match 与 match_phrase 查询语句，这样相当于 match_pharse 提高了搜索短语顺序的权重，使得能够顺序匹配到的文档相关性评分更高。设置索引mappings时，<strong>给 tags 字段设置上 position_increment_gap （默认100），来增加数组元素之间的位置，此位置要超过查询所使用的 slop</strong>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="nt">&#34;query&#34;</span><span class="p">:{</span>
+        <span class="nt">&#34;bool&#34;</span><span class="p">:{</span>
+            <span class="nt">&#34;should&#34;</span><span class="p">:[</span>
+                <span class="p">{</span><span class="nt">&#34;match&#34;</span><span class="p">:{</span><span class="nt">&#34;f1&#34;</span><span class="p">:</span><span class="s2">&#34;search_text&#34;</span><span class="p">}},</span>
+                <span class="p">{</span><span class="nt">&#34;match_phrase&#34;</span><span class="p">:{</span><span class="nt">&#34;f1&#34;</span><span class="p">:{</span><span class="nt">&#34;query&#34;</span><span class="p">:</span><span class="s2">&#34;search_text&#34;</span><span class="p">,</span><span class="nt">&#34;slop&#34;</span><span class="p">:</span><span class="mi">5</span><span class="p">}}},</span>
+                <span class="p">{</span><span class="nt">&#34;match&#34;</span><span class="p">:{</span><span class="nt">&#34;f2&#34;</span><span class="p">:</span><span class="s2">&#34;search_text&#34;</span><span class="p">}}</span>
+            <span class="p">],</span>
+            <span class="nt">&#34;filter&#34;</span><span class="p">:[</span>
+                <span class="p">{</span><span class="nt">&#34;range&#34;</span><span class="p">:{</span><span class="nt">&#34;date&#34;</span><span class="p">:{</span><span class="nt">&#34;gte&#34;</span><span class="p">:</span><span class="s2">&#34;2010-01-01&#34;</span><span class="p">}}},</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4-采用boost调整查询语句的权重">4. 采用boost调整查询语句的权重</h3>
+<p><strong>查询时可以用 boost 配置来增加权重</strong>。设置后，查询语句的得分等于<strong>默认得分乘以 boost</strong>。</p>
+<ul>
+<li>
+<p>数据质量高的字段可以相应提高权重；</p>
+</li>
+<li>
+<p>match_phrase 语句的权重应该高于相应字段 match 查询的权重，因为文档中按顺序匹配的短语可能数量不会太多，但是查询关键词被分词后的词语将会很多，match的得分将会比较高，则 match 的得分将会冲淡 match_phrase 的影响；</p>
+</li>
+<li>
+<p>在 mappings 设置中，可以针对字段设置权重，查询时不用再针对字段使用 boost 设置。</p>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="nt">&#34;query&#34;</span><span class="p">:{</span>
+        <span class="nt">&#34;bool&#34;</span><span class="p">:{</span>
+            <span class="nt">&#34;should&#34;</span><span class="p">:[</span>
+                <span class="p">{</span><span class="nt">&#34;match&#34;</span><span class="p">:{</span><span class="nt">&#34;f1&#34;</span><span class="p">:</span><span class="s2">&#34;search_text&#34;</span><span class="p">}},</span>
+                <span class="p">{</span><span class="nt">&#34;match_phrase&#34;</span><span class="p">:{</span><span class="nt">&#34;f1&#34;</span><span class="p">:{</span><span class="nt">&#34;query&#34;</span><span class="p">:</span><span class="s2">&#34;search_text&#34;</span><span class="p">,</span><span class="nt">&#34;slop&#34;</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="nt">&#34;boost&#34;</span><span class="p">:</span><span class="mi">10</span><span class="p">}}},</span>
+                <span class="p">{</span><span class="nt">&#34;match&#34;</span><span class="p">:{</span><span class="nt">&#34;f2&#34;</span><span class="p">:</span><span class="s2">&#34;search_text&#34;</span><span class="p">}}</span>
+            <span class="p">],</span>
+            <span class="nt">&#34;filter&#34;</span><span class="p">:[</span>
+                <span class="p">{</span><span class="nt">&#34;range&#34;</span><span class="p">:{</span><span class="nt">&#34;date&#34;</span><span class="p">:{</span><span class="nt">&#34;gte&#34;</span><span class="p">:</span><span class="s2">&#34;2010-01-01&#34;</span><span class="p">}}},</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5采用function_score增加评分因素">5.采用function_score增加评分因素</h3>
+<p>为了增加实际项目中时间，对文档评分的影响往往比较复杂，不仅仅时简单的计算相关度，还需要根据字段对评分进行一定的计算。function_score可以解决以下问题。</p>
+<ul>
+<li><strong>时间影响</strong>：距今越近的文档具有更高的评分；</li>
+<li><strong>收藏影响</strong>：收藏数量更多的文档具有更高的评分；</li>
+<li><strong>完整性影响</strong>：完整的文档比残缺的文档具有更高的评分；</li>
+<li><strong>推广影响</strong>：被推广的文档具有更高的评分；</li>
+<li>······</li>
+</ul>
+<p>在数据搭建阶段我们就能确定这些因素的权重，并且和查询关键词没有什么关系。称之为静态评分，一般具有以下特点：</p>
+<ul>
+<li><strong>稳定性</strong>：不要经常有大幅度的变动，如果大幅度变化会导致用户搜索相同的关键词过段时间出来的结果会不同；</li>
+<li><strong>连续性</strong>：相似静态评分的情况下，文档的相关的等其他因素可以充分发挥作用。</li>
+<li><strong>区分度</strong>：在连续稳定的情况下，应该有一定的区分度，也即分值的间隔应该合理。如果有 1000 份文档，在 1.0 分到 1.001 分之间，这其实是没有实际意义的，因为对文档排名的影响太少了。</li>
+</ul>
+<p>在ES中有以下的方式实现这些因素对排名的影响：</p>
+<ul>
+<li>script_score，这是最灵活的方式，可以自定义算法；</li>
+<li>weight，乘以一个权重数值；</li>
+<li>random_score，随机分数；</li>
+<li>field_value_factor，使用某个字段来影响总分数；</li>
+<li>decay fucntion，包括gauss、exp、linear三种衰减函数。</li>
+</ul>
+<h4 id="filed_value_factor">filed_value_factor</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="nt">&#34;query&#34;</span><span class="p">:{</span>
+        <span class="nt">&#34;function_score&#34;</span><span class="p">:{</span>
+            <span class="nt">&#34;field_value_factor&#34;</span><span class="p">:{</span>
+                <span class="nt">&#34;field&#34;</span><span class="p">:</span> <span class="s2">&#34;collection_num&#34;</span><span class="p">,</span>
+                <span class="nt">&#34;factor&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="nt">&#34;modifier&#34;</span><span class="p">:</span> <span class="s2">&#34;log2p&#34;</span><span class="p">,</span>
+                <span class="nt">&#34;missing&#34;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>modifier支持的函数有：</p>
+<ul>
+<li><strong>none</strong>：$score^* = score \cdot collectionNum$</li>
+<li><strong>log1p</strong>：$score^* = score \cdot log(1 + factor \cdot collectionNum)$</li>
+<li><strong>log2p</strong>：$score^* = score \cdot log(2 + factor \cdot collectionNum)$</li>
+<li><strong>ln</strong> : $score^* = score \cdot ln(factor \cdot collectionNum)$</li>
+<li><strong>ln1p</strong> : $score^* = score \cdot ln(1 + factor \cdot collectionNum)$</li>
+<li><strong>ln2p</strong> : $score^* = score \cdot ln(2 + factor \cdot collectionNum)$</li>
+<li><strong>square</strong></li>
+<li><strong>sqrt</strong></li>
+<li><strong>reciprocal</strong></li>
+</ul>
+<p>除了modifier还有boost_mode可以改变对评分影响的模式，默认的改变评分方式为乘积，如果将boost_mode设定为sum那么将大大弱化这些因素对结果的影响。最后还可以加上max_boost参数来限定最大的boost值。missing参数还可以用来降低残缺文档的评分，把 missing 设置为小于1的数值即可。</p>
+<h4 id="decay-function">decay function</h4>
+<p>衰减函数<strong>可以实现平滑过渡，使距离某个点越近的文档分数越高，越远的分数越低</strong>。使用衰减函数很容易实现时间越近的文档得分就越高的场景。ES提供了三个衰减函数，我们先来看一下这三种衰减函数的差别。</p>
+<p><img src="/p/study-es/es-%E8%A1%B0%E5%87%8F%E5%87%BD%E6%95%B0.jpg"
+	width="808"
+	height="454"
+	srcset="/p/study-es/es-%E8%A1%B0%E5%87%8F%E5%87%BD%E6%95%B0_hu1c76feb9b2706ad14d03897c9357b434_29245_480x0_resize_q75_box.jpg 480w, /p/study-es/es-%E8%A1%B0%E5%87%8F%E5%87%BD%E6%95%B0_hu1c76feb9b2706ad14d03897c9357b434_29245_1024x0_resize_q75_box.jpg 1024w"
+	loading="lazy"
+	
+		alt="es-衰减函数.jpg"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="427px"
+	
+></p>
+<ul>
+<li>linear，是两条线性函数，从直线和横轴相交处以外，评分都为0；</li>
+<li>exp，是指数函数，先剧烈的衰减，然后缓慢衰减；</li>
+<li>guass，高斯衰减是最常用的，先缓慢再剧烈再缓慢，scale相交的点附近衰减比较剧烈。</li>
+</ul>
+<p>当我们想选取一定范围内的结果，或者一定范围内的结果比较重要时，例如某个时间、地域（圆形）、价格范围内，都可以使用高斯衰减函数。高斯衰减函数有4个参数可以设置</p>
+<ul>
+<li>origin：中心点，或字段可能的最佳值，落在原点 origin 上的文档评分 _score 为满分 1.0 ；</li>
+<li>scale：衰减率，即一个文档从原点 origin 下落时，评分 _score 改变的速度；</li>
+<li>decay：从原点 origin 衰减到 scale 所得的评分 _score ，默认值为 0.5 ；</li>
+<li>offset：以原点 origin 为中心点，为其设置一个非零的偏移量 offset 覆盖一个范围，而不只是单个原点。在范围 -offset &lt;= origin &lt;= +offset 内的所有评分 _score 都是 1.0 。</li>
+</ul>
+<p>假定搜索引擎中三年内的文档会比较重要，三年之前的信息价值降低，就可以选择 origin 为今天，scale 为三年，decay 为 0.5，offset 为三个月。</p>
+<h3 id="6采用script_sort进行排序">6.采用script_sort进行排序</h3>
+<h4 id="基于脚本的排序">基于脚本的排序</h4>
+<p>允许根据自定义脚本进行排序，下面是一个示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="err">GET</span> <span class="err">/_search</span>
+<span class="p">{</span>
+    <span class="nt">&#34;query&#34;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&#34;term&#34;</span> <span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;user&#34;</span> <span class="p">:</span> <span class="s2">&#34;kimchy&#34;</span> <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&#34;sort&#34;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&#34;_script&#34;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&#34;type&#34;</span> <span class="p">:</span> <span class="s2">&#34;number&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;script&#34;</span> <span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&#34;lang&#34;</span><span class="p">:</span> <span class="s2">&#34;painless&#34;</span><span class="p">,</span>
+                <span class="nt">&#34;source&#34;</span><span class="p">:</span> <span class="s2">&#34;doc[&#39;field_name&#39;].value * params.factor&#34;</span><span class="p">,</span>
+                <span class="nt">&#34;params&#34;</span> <span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&#34;factor&#34;</span> <span class="p">:</span> <span class="mf">1.1</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">&#34;order&#34;</span> <span class="p">:</span> <span class="s2">&#34;asc&#34;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="如何使用脚本">如何使用脚本</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="s2">&#34;script&#34;</span><span class="err">:</span> <span class="p">{</span>
+    <span class="nt">&#34;lang&#34;</span><span class="p">:</span>   <span class="s2">&#34;...&#34;</span><span class="p">,</span>  
+    <span class="nt">&#34;source&#34;</span> <span class="err">|</span> <span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;...&#34;</span><span class="p">,</span> 
+    <span class="nt">&#34;params&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="err">...</span> <span class="p">}</span> 
+  <span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>&ldquo;lang&rdquo;：编写脚本所用的语言，默认为painless。
+&ldquo;source&rdquo; | &ldquo;id&rdquo;：可以指定为内联脚本或存储脚本的脚本本身。
+&ldquo;params&rdquo;：应传递到脚本中的任何命名参数。</p>
+<h4 id="人员搜索排序脚本">人员搜索排序脚本</h4>
+<p>当前ES中存储的自定义人员排序脚本，根据人员关键词权重进行排序。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/elastic/">Elastic</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/study-tars/">
+        
+        
+            <div class="article-image">
+                <img src="/p/study-tars/tars.9fe6023b0935064052c3cf28ed4cbd42_hu875a888cf5d5e3780616d87f4a390bc1_55883_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post Tars学习记录"
+                        data-key="study-tars" 
+                        data-hash="md5-n&#43;YCOwk1BkBSw88o7Uy9Qg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Tars学习记录</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 一千零一夜
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

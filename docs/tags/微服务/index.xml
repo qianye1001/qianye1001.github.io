@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>微服务 on 一千零一夜</title>
+        <link>https://wuyoudexiao.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
+        <description>Recent content in 微服务 on 一千零一夜</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <lastBuildDate>Thu, 02 Sep 2021 16:00:00 +0000</lastBuildDate><atom:link href="https://wuyoudexiao.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Tars学习记录</title>
+        <link>https://wuyoudexiao.github.io/p/study-tars/</link>
+        <pubDate>Thu, 02 Sep 2021 16:00:00 +0000</pubDate>
+        
+        <guid>https://wuyoudexiao.github.io/p/study-tars/</guid>
+        <description>&lt;img src="https://wuyoudexiao.github.io/p/study-tars/tars.png" alt="Featured image of post Tars学习记录" /&gt;&lt;h1 id=&#34;tars学习记录&#34;&gt;Tars学习记录&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参考官方文档 &lt;a class=&#34;link&#34; href=&#34;https://doc.tarsyun.com/#/default-index&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://doc.tarsyun.com/#/default-index&lt;/a&gt;
+如果本文内容与官方文档出现偏差以官方文档为准&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;springboot-客户端-调用方法&#34;&gt;SpringBoot 客户端 调用方法&lt;/h2&gt;
+&lt;h3 id=&#34;1引入tars文件&#34;&gt;1.引入*.tars文件&lt;/h3&gt;
+&lt;p&gt;tar文件放于resources文件夹下面&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;module graph
+{
+    interface Person{
+        string findPersonById(string id);
+        string findShortPathByNumber(string type,string number1,string number2);
+        string getLinkByName(string number,string type);
+    };
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;2修改pomxml文件&#34;&gt;2.修改pom.xml文件&lt;/h3&gt;
+&lt;p&gt;pom文件中添加依赖与打包插件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;        &amp;lt;!--tars--&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;com.tencent.tars&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;tars-client&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;1.7.2&amp;lt;/version&amp;gt;
+            &amp;lt;type&amp;gt;jar&amp;lt;/type&amp;gt;
+            &amp;lt;exclusions&amp;gt;
+                &amp;lt;exclusion&amp;gt;
+                    &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt;
+                    &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt;
+                &amp;lt;/exclusion&amp;gt;
+            &amp;lt;/exclusions&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;打包插件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;					&amp;lt;plugin&amp;gt;
+                &amp;lt;groupId&amp;gt;com.tencent.tars&amp;lt;/groupId&amp;gt;
+                &amp;lt;artifactId&amp;gt;tars-maven-plugin&amp;lt;/artifactId&amp;gt;
+                &amp;lt;version&amp;gt;1.7.2&amp;lt;/version&amp;gt;
+                &amp;lt;configuration&amp;gt;
+                    &amp;lt;tars2JavaConfig&amp;gt;
+                        &amp;lt;!-- tars文件位置 --&amp;gt;
+                        &amp;lt;tarsFiles&amp;gt;
+                            &amp;lt;tarsFile&amp;gt;${basedir}/src/main/resources/sda.tars&amp;lt;/tarsFile&amp;gt;
+                        &amp;lt;/tarsFiles&amp;gt;
+                        &amp;lt;!-- 源文件编码 --&amp;gt;
+                        &amp;lt;tarsFileCharset&amp;gt;UTF-8&amp;lt;/tarsFileCharset&amp;gt;
+                        &amp;lt;!-- 生成代码，PS：客户端调用，这里需要设置为false --&amp;gt;
+                        &amp;lt;servant&amp;gt;false&amp;lt;/servant&amp;gt;
+                        &amp;lt;!-- 生成源代码编码 --&amp;gt;
+                        &amp;lt;charset&amp;gt;UTF-8&amp;lt;/charset&amp;gt;
+                        &amp;lt;!-- 生成的源代码目录 --&amp;gt;
+                        &amp;lt;srcPath&amp;gt;${basedir}/src/main/java/&amp;lt;/srcPath&amp;gt;
+                        &amp;lt;!-- 生成源代码包前缀 --&amp;gt;
+                        &amp;lt;packagePrefixName&amp;gt;cn.edu.seu.matrix.tars&amp;lt;/packagePrefixName&amp;gt;
+                    &amp;lt;/tars2JavaConfig&amp;gt;
+                &amp;lt;/configuration&amp;gt;
+            &amp;lt;/plugin&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;3执行mvn-tarstars2java-生成文件&#34;&gt;3.执行mvn tars:tars2java 生成文件&lt;/h3&gt;
+&lt;p&gt;mvn执行后在定义的目录里生成文件&lt;/p&gt;
+&lt;h3 id=&#34;4调用&#34;&gt;4.调用&lt;/h3&gt;
+&lt;p&gt;在@service或者@Controller类中添加&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;    private CommunicatorConfig cfg = new CommunicatorConfig();
+    private Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(cfg);
+    private String ip_tars=&amp;#34;SERVER_IP&amp;#34;; // 在tars上运行的服务用 173 的，其余用机器地址
+    private final String tars_app_name=&amp;#34;SERVER_NAME&amp;#34;; // 举例 SciDataAnalysis.SocialNetwork
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后生成代理，调用方法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;PersonPrx proxy = communicator.stringToProxy(PersonPrx.class, tars_app_name + &amp;#34;.PersonObj@tcp -h &amp;#34; + ip_tars + &amp;#34; -t 60000 -p 27430 -e 0&amp;#34;);
+proxy.findPersonById(number)
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;服务端-提供服务方法&#34;&gt;服务端 提供服务方法&lt;/h2&gt;
+&lt;h3 id=&#34;1-写tars文件&#34;&gt;1. 写tars文件&lt;/h3&gt;
+&lt;p&gt;tars文件的编写请参考官方文档&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参考官方文档 &lt;a class=&#34;link&#34; href=&#34;https://doc.tarsyun.com/#/base/tars-protocol.md&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://doc.tarsyun.com/#/base/tars-protocol.md&lt;/a&gt;
+如果本文内容与官方文档出现偏差以官方文档为准&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;2修改pomxml文件-1&#34;&gt;2.修改pom.xml文件&lt;/h3&gt;
+&lt;p&gt;pom文件中添加依赖与打包插件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;com.tencent.tars&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;tars-spring-boot-starter&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;1.7.2&amp;lt;/version&amp;gt;
+            &amp;lt;type&amp;gt;jar&amp;lt;/type&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;打包插件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;					            &amp;lt;plugin&amp;gt;
+                &amp;lt;groupId&amp;gt;com.tencent.tars&amp;lt;/groupId&amp;gt;
+                &amp;lt;artifactId&amp;gt;tars-maven-plugin&amp;lt;/artifactId&amp;gt;
+                &amp;lt;version&amp;gt;1.7.2&amp;lt;/version&amp;gt;
+                &amp;lt;configuration&amp;gt;
+                    &amp;lt;tars2JavaConfig&amp;gt;
+                        &amp;lt;!-- tars文件位置 --&amp;gt;
+                        &amp;lt;tarsFiles&amp;gt;
+                            &amp;lt;tarsFile&amp;gt;${basedir}/src/main/resources/socialNetwork.tars&amp;lt;/tarsFile&amp;gt;
+                        &amp;lt;/tarsFiles&amp;gt;
+                        &amp;lt;!-- 源文件编码 --&amp;gt;
+                        &amp;lt;tarsFileCharset&amp;gt;UTF-8&amp;lt;/tarsFileCharset&amp;gt;
+                        &amp;lt;!-- 生成服务端代码 --&amp;gt;
+                        &amp;lt;servant&amp;gt;true&amp;lt;/servant&amp;gt;
+                        &amp;lt;!-- 生成源代码编码 --&amp;gt;
+                        &amp;lt;charset&amp;gt;UTF-8&amp;lt;/charset&amp;gt;
+                        &amp;lt;!-- 生成的源代码目录 --&amp;gt;
+                        &amp;lt;srcPath&amp;gt;${basedir}/src/main/java&amp;lt;/srcPath&amp;gt;
+                        &amp;lt;!-- 生成源代码包前缀 --&amp;gt;
+                        &amp;lt;packagePrefixName&amp;gt;cn.edu.seu.socialNetwork&amp;lt;/packagePrefixName&amp;gt;
+                    &amp;lt;/tars2JavaConfig&amp;gt;
+                &amp;lt;/configuration&amp;gt;
+            &amp;lt;/plugin&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;3执行mvn-tarstars2java-生成文件-1&#34;&gt;3.执行mvn tars:tars2java 生成文件&lt;/h3&gt;
+&lt;p&gt;mvn执行后在定义的目录里生成文件,其中Servant接口类是自动生成的&lt;/p&gt;
+&lt;h3 id=&#34;4实现&#34;&gt;4.实现&lt;/h3&gt;
+&lt;p&gt;将Servant接口类实现一下
+其中PersonObj与页面上的定义一致&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;@TarsServant(&amp;#34;PersonObj&amp;#34;)
+public class PersonObj implements PersonServant {
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;类中需要@Override所有的 方法&lt;/p&gt;
+&lt;h3 id=&#34;5定义服务&#34;&gt;5.定义服务&lt;/h3&gt;
+&lt;h3 id=&#34;6打包上传&#34;&gt;6.打包上传&lt;/h3&gt;
+&lt;h2 id=&#34;基于docker容器的tars-java环境搭建&#34;&gt;基于Docker容器的TARS JAVA环境搭建&lt;/h2&gt;
+&lt;h3 id=&#34;安装前准备&#34;&gt;安装前准备&lt;/h3&gt;
+&lt;p&gt;本教程需要预先安装&lt;strong&gt;Docker&lt;/strong&gt;环境，所使用的IDE为&lt;strong&gt;IntelliJ IDEA&lt;/strong&gt;。所有安装都基于Windows环境下。文中涉及到的目录均以 &lt;em&gt;C:/User/xxx/&lt;/em&gt; 写法表示&lt;/p&gt;
+&lt;h4 id=&#34;获取docker镜像&#34;&gt;获取Docker镜像&lt;/h4&gt;
+&lt;p&gt;拉取最新的TARS容器（Java版）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;docker pull tarscloud/tars:java
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;如果需要不同JDK版本的容器，可以基于Dockerfile来修改和构建自己的容器镜像（install.sh内容也要做相应修改）。由于该镜像未安装mysql，故还需要安装mysql镜像，以5.7版本为例。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;docker pull mysql:5.7
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;快速上手例程&#34;&gt;快速上手例程&lt;/h3&gt;
+&lt;p&gt;本教程使用代码仓库中的
+quickstart-server 和 quickerstart-client
+例程作为搭建代码，可以先下载到本地使用IDEA打开。&lt;/p&gt;
+&lt;h3 id=&#34;开发方式&#34;&gt;开发方式&lt;/h3&gt;
+&lt;p&gt;使用docker镜像进行Tars相关的开发非常方便，例如可以把项目放置在某个本地目录下，如&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;C:/Users/xxx/tars_data&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;，再将该目录挂载到镜像的&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;/data&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;目录，这样就能在本地使用编辑器或IDE对项目文件进行开发。
+如果需要进入Tars环境进行编译或测试，可以使用命令&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;docker exec&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;进入容器内部查看。&lt;/p&gt;
+&lt;h3 id=&#34;服务端配置&#34;&gt;服务端配置&lt;/h3&gt;
+&lt;h4 id=&#34;启动容器&#34;&gt;启动容器&lt;/h4&gt;
+&lt;p&gt;首先执行下面的命令来启动TARS（Windows命令行不支持 \ 命令换行），注意需要先在 &lt;em&gt;C:/User/xxx/&lt;/em&gt; 目录下新建目录 &lt;em&gt;mysql_data&lt;/em&gt; 和 &lt;em&gt;tars_data&lt;/em&gt; 。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;docker run -d --name mysql \
+        -e MYSQL_ROOT_PASSWORD=password \
+        -p 3306:3306 \
+        -v C:/User/xxx/mysql_data:/var/lib/mysql \
+        mysql:5.7 --innodb_use_native_aio=0
+
+docker run -d -it --name tars_java \
+        --link mysql \
+        --env DBIP=mysql \
+        --env DBPort=3306 \
+        --env DBUser=root \
+        --env DBPassword=password \
+        -p 3000:3000 \
+        -p 18600:18600 \
+        -v C:/Users/xxx/tars_data:/data \
+        tarscloud/tars:java
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;待容器启动完毕，此时可以在本地访问&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;http://127.0.0.1:3000&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;em&gt;http://127.0.0.1:3000&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;查看TARS的web管理界面了。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;注：如果你使用的mysql不是5.6的版本，可能需要调整docker run的参数&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;java-本地单元测试方法&#34;&gt;Java 本地单元测试方法&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参考 &lt;a class=&#34;link&#34; href=&#34;https://tarscloud.github.io/TarsDocs/dev/tarsjava/tarsspringboot-shi-yong-shuo-ming.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://tarscloud.github.io/TarsDocs/dev/tarsjava/tarsspringboot-shi-yong-shuo-ming.html&lt;/a&gt;
+{.is-info}&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;拷贝node生成的模板文件到本地（在服务器 tasnode/data/服务名/conf 目录下）&lt;/li&gt;
+&lt;li&gt;修改其中每个servant的启动ip和端口文本地ip端口 配置启动参数&lt;/li&gt;
+&lt;li&gt;-Dconfig=(模板路径) 通过ide启动MainClass&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
