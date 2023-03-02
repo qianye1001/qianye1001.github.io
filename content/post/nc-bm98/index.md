@@ -1,23 +1,20 @@
 ---
 title: BM98 螺旋矩阵
-description: 数组 - 螺旋输出矩阵
-slug: nc-BM98
-date: 2023-03-02 14:28:00+0000
+description: 牛客 - 数组 - 螺旋输出矩阵
+slug: nc-bm98
+date: 2023-03-01 14:28:00+0000
 image: cover.png
-math: true
 comments: false
 categories:
-    - 学习
-    - 算法题
+    - 算法
 tags:
     - 数组
     - Easy
 ---
-
 # BM98 螺旋矩阵
 > https://www.nowcoder.com/practice/7edf70f2d29c4b599693dc3aaeea1d31
 ## 描述
-给定一个m x n大小的矩阵（m行，n列），按螺旋的顺序返回矩阵中的所有元素。
+给定一个mxn大小的矩阵（m行，n列），按螺旋的顺序返回矩阵中的所有元素。
 ## 要求：
 空间复杂度 O(nm) ，时间复杂度 O(nm)
 
