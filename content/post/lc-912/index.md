@@ -2,8 +2,8 @@
 title: LC912 数组排序
 description: 快排超时！坑！
 slug: lc-912
-date: 2023-03-013 14:28:00+0000
-image: 640.gif
+date: 2023-03-13 14:28:00+0000
+image: cover.png
 comments: false
 categories:
     - 算法
@@ -19,7 +19,6 @@ tags:
 ## 原解
 
 原本用的就是一个简单的快速排序，用最左作为基准点，但是这题目坑就在这了
-![快排动图](640.gif)
 
 ``` go
 func sortArray(nums []int) []int {
@@ -117,3 +116,41 @@ func quickSort(nums []int, l,r int){
 }
 ```
 
+## 三路快排
+
+三路快排考虑了大量重复元素的情况，可以参考LC75. 颜色分类
+
+``` go
+func sortArray(nums []int) []int {
+    rand.Seed(2)
+    quickSort(nums,0,len(nums))
+    return nums
+}
+
+func quickSort(nums []int, l,r int){
+    if r-l<=1{
+        return
+    }
+
+    point := rand.Intn(r-l)+l
+    nums[point],nums[l] =nums[l],nums[point]
+
+    lt,gt:=l,r
+    i:=l+1
+    for i<gt{
+        if nums[i] == nums[l]{
+            i++
+        }else if nums[i] < nums[l]{
+            nums[lt+1],nums[i]=nums[i],nums[lt+1]
+            lt++
+            i++
+        }else{
+            nums[gt-1],nums[i]=nums[i],nums[gt-1]
+            gt--
+        }
+    }
+    nums[l],nums[lt]=nums[lt],nums[l]
+    quickSort(nums,l,lt)
+    quickSort(nums,gt,r)
+}
+```
