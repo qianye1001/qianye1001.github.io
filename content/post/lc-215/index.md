@@ -197,4 +197,43 @@ func fetch(nums[]int,size int,i int){
 
 ## 快排解
 
-快排解是利用快排的分治思路，每次分割 `<p` 和 `>p`两个部分，但是我们需要的第k个数只在其中的一个区间内，而另一个区间是否有序我们并不关心，所以可以只选择一个部分继续排序，相较于原本的快排，不完整的快排的时间复杂度为`O(n)`，具体代码暂时不写了，上一篇博客详细写了快排的实现
+快排解是利用快排的分治思路，每次分割 `<p` 和 `>p`两个部分，但是我们需要的第k个数只在其中的一个区间内，而另一个区间是否有序我们并不关心，所以可以只选择一个部分继续排序，相较于原本的快排，不完整的快排的时间复杂度为`O(n)`，上一篇博客详细写了快排的实现
+```go
+package main
+import "math/rand"
+/**
+ * 
+ * @param a int整型一维数组 
+ * @param n int整型 
+ * @param K int整型 
+ * @return int整型
+*/
+
+func findKth( a []int ,  n int ,  K int ) int {
+    // write code here
+    rand.Seed(2)
+    return quick(a,n,K)
+}
+
+func quick(a []int, n int, K int) int {
+	t := rand.Intn(n)
+	a[0], a[t] = a[t], a[0]
+	lptr, rptr := 1, n-1
+	for lptr <= rptr {
+		if a[lptr] > a[0] {
+			a[lptr], a[rptr] = a[rptr], a[lptr]
+			rptr--
+		} else {
+			lptr++
+		}
+	}
+	if n-lptr+1 == K {
+		return a[0]
+	} else if K <= n-lptr {
+		return quick(a[lptr:], n-lptr, K)
+	} else {
+		a[0], a[lptr-1] = a[lptr-1], a[0]
+		return quick(a[:lptr-1], lptr-1, K-n+lptr-1)
+	}
+}
+```
