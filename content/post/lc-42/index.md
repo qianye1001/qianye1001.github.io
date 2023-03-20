@@ -64,4 +64,43 @@ func min(a, b int) int {
 }
 ```
 ## 双指针
+双指针方法的优点在于节约了dp数组的存储空间，空间复杂度`O(1)`且只遍历一次，相比dp多次要快，其核心思路是通过记录左右的最大值作为其边界，并控制左右边界向内收缩
+```go
+package main
 
+func maxWater(arr []int) int64 {
+	// write code here
+	if len(arr) <= 2 {
+		return 0
+	}
+	left, right := 0, len(arr)-1
+	maxL, maxR := arr[left], arr[right]
+	res := 0
+	for left < right {
+		maxL = max(maxL, arr[left])
+		maxR = max(maxR, arr[right])
+
+		if maxL <= maxR {
+			left++
+			if maxL-arr[left] > 0 {
+				res += maxL - arr[left]
+			}
+		} else {
+			right--
+			if maxR-arr[right] > 0 {
+				res += maxR - arr[right]
+			}
+		}
+	}
+	return int64(res)
+
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	} else {
+		return b
+	}
+}
+```
