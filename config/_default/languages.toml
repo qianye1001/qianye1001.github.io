@@ -3,10 +3,11 @@
 [en]
 languageName = "English"
 languagedirection = "ltr"
-title = "Example Site"
+title = "1001"
 weight = 1
 [zh-cn]
 languageName = "Chinese"
 languagedirection = "ltr"
-title = "Example Site"
+title = "一千零一夜"
 weight = 2
+favicon="favicon/favicon.ico"
