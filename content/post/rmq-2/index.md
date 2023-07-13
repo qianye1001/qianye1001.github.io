@@ -2,8 +2,7 @@
 title: MQ在设计功能时候应该考虑什么？
 description: RocketMQ的学习记录
 slug: rmq-design
-date: 2023-6-20 12:00:00+0000
-image: cover.jpg
+date: 2023-06-20 14:28:00+0000
 categories:
     - 消息队列
 tags:

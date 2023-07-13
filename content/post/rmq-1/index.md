@@ -2,8 +2,7 @@
 title: Netty 与 零拷贝
 description: RocketMQ的学习记录
 slug: rmq-netty
-date: 2023-6-18 12:00:00+0000
-image: cover.jpg
+date: 2023-06-05 14:28:00+0000
 categories:
     - 消息队列
 tags:
