@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CAS on 一千零一夜</title><link>https://wuyoudexiao.github.io/tags/cas/</link><description>Recent content in CAS on 一千零一夜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 02 Sep 2021 14:28:00 +0000</lastBuildDate><atom:link href="https://wuyoudexiao.github.io/tags/cas/index.xml" rel="self" type="application/rss+xml"/><item><title>前后端分离的CAS单点登录</title><link>https://wuyoudexiao.github.io/p/study-cas/</link><pubDate>Thu, 02 Sep 2021 14:28:00 +0000</pubDate><guid>https://wuyoudexiao.github.io/p/study-cas/</guid><description>&lt;img src="https://wuyoudexiao.github.io/p/study-cas/cas.png" alt="Featured image of post 前后端分离的CAS单点登录" />&lt;h1 id="前后端分离的cas单点登录">前后端分离的CAS单点登录&lt;/h1>
+&lt;h2 id="cas登录原理">CAS登录原理&lt;/h2>
+&lt;blockquote>
+&lt;p>官方网址：&lt;a class="link" href="https://apereo.github.io/cas/6.6.x/protocol/CAS-Protocol.html" target="_blank" rel="noopener"
+>https://apereo.github.io/cas/6.6.x/protocol/CAS-Protocol.html&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>从官网上把流程图找到
+&lt;img src="https://wuyoudexiao.github.io/p/study-cas/cas_flow_diagram.png"
+width="1230"
+height="2020"
+srcset="https://wuyoudexiao.github.io/p/study-cas/cas_flow_diagram_hu104f034e182f1fb5c8f6946631aef207_219051_480x0_resize_box_3.png 480w, https://wuyoudexiao.github.io/p/study-cas/cas_flow_diagram_hu104f034e182f1fb5c8f6946631aef207_219051_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="cas_flow_diagram.png"
+class="gallery-image"
+data-flex-grow="60"
+data-flex-basis="146px"
+>
+我们简答梳理一下流程，主要分为两个步骤，未登录（包括失效的）和登录的&lt;/p>
+&lt;h3 id="第一次登录未流程">第一次登录未流程&lt;/h3>
+&lt;ol>
+&lt;li>浏览器向应用发起请求，应用发现该请求未授权（无session或者过期）&lt;/li>
+&lt;li>应用响应一个重定向给浏览器，重定向去CAS登录页面&lt;/li>
+&lt;li>用户登录页面输入密码&lt;/li>
+&lt;li>CAS认证用户通过，写入TGC到cookie，带着Ticket重定向到应用&lt;/li>
+&lt;li>应用向CAS验证Ticket的有效性，有效就set Session并重定向到服务（去掉Ticket）&lt;/li>
+&lt;li>浏览器带着Session请求服务，服务校验Session&lt;/li>
+&lt;/ol>
+&lt;h3 id="第二次登录流程">第二次登录流程&lt;/h3>
+&lt;ol>
+&lt;li>浏览器向应用发起请求，应用校验Session&lt;/li>
+&lt;li>Session合法就正常执行并返回&lt;/li>
+&lt;/ol>
+&lt;h3 id="第一次登录另一个应用">第一次登录另一个应用&lt;/h3>
+&lt;ol>
+&lt;li>浏览器向应用发起请求，应用发现请求未授权&lt;/li>
+&lt;li>应用将浏览器携带TGT重定向去CAS登录页面&lt;/li>
+&lt;li>CAS校验TGT合法性，并重定向回应用（带着Ticket）&lt;/li>
+&lt;li>应用向CAS确认Ticket的合法性，合法就签发Session&lt;/li>
+&lt;/ol>
+&lt;h2 id="cas登录存在的问题">CAS登录存在的问题&lt;/h2>
+&lt;p>一个域名下的前端页面往往非常多，如果Session在某一个页面访问的时候超时，需要重新登录，那么CAS服务发送重定向的时候不知道来源所以只能重定向到首页，会给用户带来较差的体验。&lt;/p>
+&lt;h2 id="解决办法">解决办法&lt;/h2></description></item></channel></rss>

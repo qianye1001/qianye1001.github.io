@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>数据库 on 一千零一夜</title><link>https://wuyoudexiao.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</link><description>Recent content in 数据库 on 一千零一夜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 01 May 2023 12:00:00 +0000</lastBuildDate><atom:link href="https://wuyoudexiao.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/index.xml" rel="self" type="application/rss+xml"/><item><title>数据库类型</title><link>https://wuyoudexiao.github.io/p/db-classification/</link><pubDate>Mon, 01 May 2023 12:00:00 +0000</pubDate><guid>https://wuyoudexiao.github.io/p/db-classification/</guid><description>&lt;h1 id="1-key-value">1. KEY-VALUE&lt;/h1>
+&lt;blockquote>
+&lt;p>例子：Redis，Memocashed， etcd&lt;/p>
+&lt;/blockquote>
+&lt;p>特征：&lt;/p>
+&lt;ul>
+&lt;li>数据本身存储的结构类似于Map&amp;lt;String,Object&amp;gt;或者python的字典&lt;/li>
+&lt;li>有一组KEY，且每一个KEY都是唯一的，指向某个值&lt;/li>
+&lt;li>Redis等数据库数据存储于内存中&lt;/li>
+&lt;/ul>
+&lt;p>优点：&lt;/p>
+&lt;ul>
+&lt;li>内存io远远快于硬盘io （通常单次操作耗时在亚微秒级）&lt;/li>
+&lt;/ul>
+&lt;p>缺点：&lt;/p>
+&lt;ul>
+&lt;li>内存为易丢失性存储&lt;/li>
+&lt;li>无法进行join等操作&lt;/li>
+&lt;/ul>
+&lt;p>使用：&lt;/p>
+&lt;ul>
+&lt;li>多数时候作为缓存的角色来降低数据io的延迟&lt;/li>
+&lt;li>也可以用来做消息队列、发布订阅等需求&lt;/li>
+&lt;/ul>
+&lt;h1 id="2wide-column">2.WIDE COLUMN&lt;/h1>
+&lt;blockquote>
+&lt;p>例子：Cassandra， Hbase&lt;/p>
+&lt;/blockquote>
+&lt;p>特征：&lt;/p>
+&lt;ul>
+&lt;li>可以看作给KEY-VALUE型数据库的增加了一个维度&lt;/li>
+&lt;li>有一组KEY，且每一个KEY都是唯一的，一个KEY可以对应多个列族，每个族群对应一列有序的数据&lt;/li>
+&lt;/ul>
+&lt;p>优点：&lt;/p>
+&lt;ul>
+&lt;li>可以处理非结构化的数据&lt;/li>
+&lt;li>可以执行数据的聚合操作&lt;/li>
+&lt;li>采用于SQL类似的CQL进行查询，学习成本不高&lt;/li>
+&lt;li>去中心化存储，支持横向扩展&lt;/li>
+&lt;/ul>
+&lt;p>缺点：&lt;/p>
+&lt;ul>
+&lt;li>无法进行join等操作&lt;/li>
+&lt;/ul>
+&lt;p>使用：&lt;/p>
+&lt;ul>
+&lt;li>多数用字啊经常写却不经常读取的场景里&lt;/li>
+&lt;li>处理时间相关数据较优秀&lt;/li>
+&lt;/ul>
+&lt;h1 id="3document">3.DOCUMENT&lt;/h1>
+&lt;blockquote>
+&lt;p>例子：MongoDB， FireStore&lt;/p>
+&lt;/blockquote>
+&lt;p>特征：&lt;/p>
+&lt;ul>
+&lt;li>需要建立docuemnt，每个文档都是KEY-VALUE数据的容器&lt;/li>
+&lt;li>非结构化，不需要Schema&lt;/li>
+&lt;li>docuemnts聚合成为一个Collection，Collection中的字段可以 被索引，docuemnt可以具有上下层次关系&lt;/li>
+&lt;/ul>
+&lt;p>优点：&lt;/p>
+&lt;ul>
+&lt;li>一定程度上可以对关系型数据进行建模和读写&lt;/li>
+&lt;li>读数据会很快&lt;/li>
+&lt;/ul>
+&lt;p>缺点：&lt;/p>
+&lt;ul>
+&lt;li>无法进行join等操作&lt;/li>
+&lt;li>写数据较为复杂&lt;/li>
+&lt;/ul>
+&lt;p>使用：&lt;/p>
+&lt;ul>
+&lt;li>已经较为通用，可应用于内容管理，游戏开发等场景&lt;/li>
+&lt;/ul>
+&lt;h1 id="4relational">4.RELATIONAL&lt;/h1>
+&lt;blockquote>
+&lt;p>例子：Mysql，SQLServer&lt;/p>
+&lt;/blockquote>
+&lt;p>特征：&lt;/p>
+&lt;ul>
+&lt;li>采用SQL语句（structured query language）&lt;/li>
+&lt;li>每个表存储单一的类型，大部分时候都会有唯一在主键&lt;/li>
+&lt;li>通过外键将不同的表中的数据联合起来&lt;/li>
+&lt;li>数据以最小单元，按照特定的格式统一存储&lt;/li>
+&lt;/ul>
+&lt;p>优点：&lt;/p>
+&lt;ul>
+&lt;li>ACID 保证事务的有效性&lt;/li>
+&lt;li>join查询&lt;/li>
+&lt;/ul>
+&lt;p>缺点：&lt;/p>
+&lt;ul>
+&lt;li>需要首先确定Schema&lt;/li>
+&lt;li>难以规模化&lt;/li>
+&lt;/ul>
+&lt;h1 id="5graph">5.GRAPH&lt;/h1>
+&lt;blockquote>
+&lt;p>例子：neo4j&lt;/p>
+&lt;/blockquote>
+&lt;p>特征：&lt;/p>
+&lt;ul>
+&lt;li>数据的关系被视为图的边&lt;/li>
+&lt;/ul>
+&lt;p>优点：&lt;/p>
+&lt;ul>
+&lt;li>多对多的关系建立简单&lt;/li>
+&lt;li>大数据量时候性能相较于SQL更好&lt;/li>
+&lt;/ul>
+&lt;p>用处：&lt;/p>
+&lt;ul>
+&lt;li>在存储关系为核心的数据时&lt;/li>
+&lt;/ul>
+&lt;h1 id="6search">6.SEARCH&lt;/h1>
+&lt;blockquote>
+&lt;p>例子：elastic&lt;/p>
+&lt;/blockquote>
+&lt;p>特征：&lt;/p>
+&lt;ul>
+&lt;li>对文本进行全文索引&lt;/li>
+&lt;/ul>
+&lt;p>优点：&lt;/p>
+&lt;ul>
+&lt;li>文本全局搜索速度快&lt;/li>
+&lt;/ul>
+&lt;p>用处：&lt;/p>
+&lt;ul>
+&lt;li>搜索&lt;/li>
+&lt;/ul></description></item></channel></rss>

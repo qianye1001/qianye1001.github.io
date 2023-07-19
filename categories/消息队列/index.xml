@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>消息队列 on 一千零一夜</title><link>https://wuyoudexiao.github.io/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><description>Recent content in 消息队列 on 一千零一夜</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 20 Jun 2023 14:28:00 +0000</lastBuildDate><atom:link href="https://wuyoudexiao.github.io/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.xml" rel="self" type="application/rss+xml"/><item><title>MQ在设计功能时候应该考虑什么？</title><link>https://wuyoudexiao.github.io/p/rmq-design/</link><pubDate>Tue, 20 Jun 2023 14:28:00 +0000</pubDate><guid>https://wuyoudexiao.github.io/p/rmq-design/</guid><description>&lt;h1 id="mq在设计功能时候应该考虑什么">MQ在设计功能时候应该考虑什么？&lt;/h1>
+&lt;h2 id="前言">前言&lt;/h2>
+&lt;blockquote>
+&lt;p>&lt;em>No Silver Bullet—Essence and Accidents of Software Engineering&lt;/em>&lt;/p>
+&lt;/blockquote>
+&lt;p>没有银弹，指的是不存在万能的，解决所有问题的方案。在设计一个方案时候，需要对功能、能力的优先级进行区分，优先保证最重要的能力。&lt;/p>
+&lt;h2 id="mq的能力优先级">MQ的能力优先级&lt;/h2>
+&lt;h3 id="1生产者发送消息正常">1.生产者发送消息正常&lt;/h3>
+&lt;p>MQ核心能力之一就是削峰填谷，如果生产者的消息发送不正常，那么显然违背了使用MQ的初衷，当然为了保护整个MQ系统的可用性，有时限流生产者的行为是可以接受的。&lt;/p>
+&lt;h3 id="2消息持久化不丢失">2.消息持久化不丢失&lt;/h3>
+&lt;p>消息持久化后丢失或者没有成功持久化，带来的结果是消息的丢失，通常需要结合业务日志做排查才能将这部分丢失数据重新找回，甚至可能就是无法找回带来实实在在的损失。&lt;/p>
+&lt;h3 id="3消息消费不丢失">3.消息消费不丢失&lt;/h3>
+&lt;p>这里的消费不丢失是指的消费位点没有被跳过，每一条消息都被消费者成功消费至少一次，如果出现消费丢失情况，且没有能够及时发现会对业务造成影响。&lt;/p>
+&lt;h3 id="4顺序消息的顺序性">4.顺序消息的顺序性&lt;/h3>
+&lt;p>顺序消息的顺序性通常是为了保证业务的正常执行，如果顺序打乱通常会造成业务执行的阻塞，但是通常容易发现，容易解决。&lt;/p>
+&lt;h3 id="5消息低延迟">5.消息低延迟&lt;/h3>
+&lt;p>MQ的延迟不是优先考虑的因素，如果需要超级低延迟，通常使用RPC调用方式，但是MQ通常也需要把延迟压到ms级&lt;/p>
+&lt;h3 id="6消息不重复">6.消息不重复&lt;/h3>
+&lt;p>为了能够保证1-4，消息不重复通常是最容易被放弃的能力，也是大部分的MQ都要求下游消费者做好幂等的原因。&lt;/p>
+&lt;h3 id="7消息可观测">7.消息可观测&lt;/h3></description></item><item><title>Netty 与 零拷贝</title><link>https://wuyoudexiao.github.io/p/rmq-netty/</link><pubDate>Mon, 05 Jun 2023 14:28:00 +0000</pubDate><guid>https://wuyoudexiao.github.io/p/rmq-netty/</guid><description>&lt;h1 id="netty-与-零拷贝">Netty 与 零拷贝&lt;/h1>
+&lt;h2 id="前言">前言&lt;/h2>
+&lt;p>在学习RocketMQ的过程中发现其零拷贝功能并不推荐开启，但是Kafka的零拷贝能力为其提供了较大的吞吐能力，为什么在RocketMQ中却不推荐开启呢？对比发现RocketMQ使用了Netty网络库的零拷贝，而Kafka的零拷贝是自己实现的，通过学习Netty的线程池和网络模型，可以从中发现问题。&lt;/p>
+&lt;h2 id="heading">&lt;/h2></description></item></channel></rss>
